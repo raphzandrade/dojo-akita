@@ -28,6 +28,9 @@
     "akita-e2e": {
       "tags": [],
       "implicitDependencies": ["akita"]
+    },
+    "todos": {
+      "tags": []
     }
   }
 }
