@@ -9,12 +9,12 @@
   </section>
 
   <p>Todos:</p>
+  <p>Tarefa ativa: {{ activeTodoId$ | async}}</p>
 
-  <div *ngFor="let todo of todos$ | async">
-    id: {{ todo.id }}
-    title: {{ todo.title }}
-    message: {{ todo.message }}
 
-    <button (click)="removeTodo(todo.id)">Deletar</button>
-  </div>
+  <!-- TODO CARDS -->
+  <dojo-akita-todo-card *ngFor="let todo of todos$ | async" [todo]="todo"
+    [isActive]="(activeTodoId$ | async) === todo.id" (remove)="removeTodo($event)" (setActive)="setActive($event)">
+  </dojo-akita-todo-card>
+
 </section>

@@ -15,6 +15,7 @@ import { Form, FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  public readonly activeTodoId$: Observable<Number>;
   public readonly todos$: Observable<Todo[]>;
 
   public readonly form: FormGroup;
@@ -24,7 +25,8 @@ export class HomeComponent implements OnInit {
     private todosQuery: TodosQuery,
     private todosService: TodosService
   ) {
-    this.todos$ = todosQuery.todos$;
+    this.activeTodoId$ = this.todosQuery.activeTodoId$;
+    this.todos$ = this.todosQuery.todos$;
 
     this.form = this.formBuilder.group({
       id: [''],
@@ -49,5 +51,9 @@ export class HomeComponent implements OnInit {
 
   public removeTodo(id: number): void {
     this.todosService.remove(id);
+  }
+
+  public setActive(id: number): void {
+    this.todosService.setActive(id);
   }
 }
