@@ -24,5 +24,10 @@ export class TodosQuery extends QueryEntity<TodosState> {
     this.error$ = this.selectError();
 
     this.todos$ = this.selectAll();
+
+    // this.todos$ = this.select(state => state.entities);
+    // this.todos$ = this.select('entities');
+
+    // this.loading$ = this.selectLoading();
   }
 }
