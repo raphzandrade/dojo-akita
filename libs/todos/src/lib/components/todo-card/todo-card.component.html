@@ -1,0 +1,19 @@
+<div class="c-todo-card" [ngClass]="{ active: isActive }">
+  <p class="c-todo-card__values"><span>id:</span> {{ todo.id }}</p>
+  <p class="c-todo-card__values"><span>title:</span> {{ todo.title }}</p>
+  <p class="c-todo-card__values"><span>message:</span> {{ todo.message }}</p>
+
+  <button class="c-todo-card__button" *ngIf="!isActive && !todo.done" (click)="onSetActive(todo.id)">
+    Trabalhar nessa tarefa
+  </button>
+
+  <button class="c-todo-card__button" *ngIf="isActive && !todo.done" (click)="onMarkAsDone(todo.id)">
+    Entregar tarefa
+  </button>
+
+  <button class="c-todo-card__button" *ngIf="isActive && !todo.done" (click)="onRemoveActive(todo.id)">
+    Deixar de trabalhar nessa tarefa
+  </button>
+
+  <button (click)="onRemove(todo.id)">Deletar tarefa</button>
+</div>

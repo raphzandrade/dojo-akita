@@ -1,0 +1,34 @@
+.c-todo-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  transition: 0.3s;
+
+  &:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &.active {
+    background-color: #52FFB8;
+  }
+
+  &__values {
+    margin: 4px 0;
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  &__button {
+    margin: 8px 0;
+  }
+}

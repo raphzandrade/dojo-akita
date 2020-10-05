@@ -118,6 +118,36 @@
           }
         }
       }
+    },
+    "todos": {
+      "projectType": "library",
+      "root": "libs/todos",
+      "sourceRoot": "libs/todos/src",
+      "prefix": "dojo-akita",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/todos/tsconfig.lib.json",
+              "libs/todos/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/todos/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/todos/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

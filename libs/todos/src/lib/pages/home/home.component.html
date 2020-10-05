@@ -1,0 +1,42 @@
+<section class="c-todos-home">
+  <h2>Criar tarefa:</h2>
+  <form
+    class="c-todos-home__todo-form"
+    [formGroup]="form"
+    (ngSubmit)="addTodo()"
+  >
+    <input
+      class="c-todos-home__todo-form--input"
+      placeholder="id"
+      formControlName="id"
+    />
+    <input
+      class="c-todos-home__todo-form--input"
+      placeholder="título"
+      formControlName="title"
+    />
+    <input
+      class="c-todos-home__todo-form--input"
+      placeholder="mensagem"
+      formControlName="message"
+    />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <p class="c-todos-home__error" *ngIf="error$ | async">{{ error$ | async }}</p>
+
+  <h2>Tarefas:</h2>
+
+  <!-- TODO CARDS -->
+  <dojo-akita-todo-card
+    class="c-todos-home__card"
+    *ngFor="let todo of todos$ | async"
+    [todo]="todo"
+    [isActive]="(activeTodoId$ | async) === todo.id"
+    (done)="markAsDone($event)"
+    (remove)="removeTodo($event)"
+    (removeActive)="removeActive($event)"
+    (setActive)="setActive($event)"
+  >
+  </dojo-akita-todo-card>
+</section>
