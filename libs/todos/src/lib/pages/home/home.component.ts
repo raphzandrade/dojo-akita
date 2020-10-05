@@ -16,6 +16,7 @@ import { Form, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
   public readonly activeTodoId$: Observable<Number>;
+  public readonly error$: Observable<String>;
   public readonly todos$: Observable<Todo[]>;
 
   public readonly form: FormGroup;
@@ -26,12 +27,13 @@ export class HomeComponent implements OnInit {
     private todosService: TodosService
   ) {
     this.activeTodoId$ = this.todosQuery.activeTodoId$;
+    this.error$ = this.todosQuery.error$;
     this.todos$ = this.todosQuery.todos$;
 
     this.form = this.formBuilder.group({
       id: [''],
       title: [''],
-      message: ['']
+      message: [''],
     });
   }
 
@@ -42,7 +44,7 @@ export class HomeComponent implements OnInit {
     const title = this.form.get('title').value;
     const message = this.form.get('message').value;
 
-    const todo = createTodo({id, title, message});
+    const todo = createTodo({ id, title, message, done: false });
 
     this.todosService.add(todo);
 
@@ -53,7 +55,15 @@ export class HomeComponent implements OnInit {
     this.todosService.remove(id);
   }
 
+  public removeActive(id: number): void {
+    this.todosService.removeActive(id);
+  }
+
   public setActive(id: number): void {
     this.todosService.setActive(id);
+  }
+
+  public markAsDone(id: number): void {
+    this.todosService.markAsDone(id, {done: true});
   }
 }

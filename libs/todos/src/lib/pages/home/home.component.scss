@@ -1,0 +1,20 @@
+.c-todos-home {
+  &__todo-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 12px;
+
+    &--input {
+      margin: 8px 0px;
+    }
+  }
+
+  &__card {
+    display: block;
+
+    margin: 12px;
+  }
+}

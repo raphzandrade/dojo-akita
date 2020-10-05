@@ -1,32 +1,60 @@
 import { Injectable } from '@angular/core';
-import { OrArray } from '@datorama/akita';
+import { OrArray, transaction, applyTransaction } from '@datorama/akita';
 import { Todo } from './todo.model';
 import { TodosStore } from './todos.store';
 
 @Injectable({ providedIn: 'root' })
 export class TodosService {
+  constructor(private todosStore: TodosStore) {}
 
-  constructor(private todosStore: TodosStore) {
-  }
+  public add(todo: Todo): void {
+    if (!todo.id) {
+      this.todosStore.setError('O id da tarefa é obrigatório');
 
-  add(todo: Todo) {
+      return;
+    }
+
+    const regexp = new RegExp('^[1-9]');
+    const isNumberOnly = regexp.test(todo.id.toString());
+
+    if (!isNumberOnly) {
+      this.todosStore.setError('O id da tarefa deve conter apenas números');
+
+      return;
+    }
+
     this.todosStore.add(todo);
+
+    this.todosStore.setError(null);
   }
 
-  update(id, todo: Partial<Todo>) {
+  public update(id: number, todo: Partial<Todo>): void {
     this.todosStore.update(id, todo);
   }
 
-  remove(id: OrArray<number>) {
-    this.todosStore.remove(id)
+  public remove(id: OrArray<number>): void {
+    this.todosStore.remove(id);
   }
 
-  setActive(id: number) {
+  public setActive(id: number): void {
     this.todosStore.setActive(id);
   }
 
-  removeActive(id: number): void {
+  public removeActive(id: number): void {
     this.todosStore.removeActive(id);
   }
 
+  @transaction()
+  public markAsDone(id: number, todo: Partial<Todo>): void {
+    this.todosStore.update(id, todo);
+    this.todosStore.removeActive(id);
+  }
+
+  // outra forma de realizar uma transaction.
+  // public markAsDone(id: number, todo: Partial<Todo>): void {
+  //   applyTransaction(() => {
+  //     this.todosStore.update(id, todo);
+  //     this.todosStore.removeActive(id);
+  //   });
+  // }
 }

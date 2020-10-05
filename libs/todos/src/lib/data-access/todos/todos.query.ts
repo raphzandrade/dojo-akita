@@ -12,6 +12,7 @@ import { Todo } from './todo.model';
 export class TodosQuery extends QueryEntity<TodosState> {
   public readonly activeTodo$: Observable<Todo>;
   public readonly activeTodoId$: Observable<Number>;
+  public readonly error$: Observable<String>;
   public readonly todos$: Observable<Todo[]>;
 
   constructor(protected store: TodosStore) {
@@ -19,6 +20,8 @@ export class TodosQuery extends QueryEntity<TodosState> {
 
     this.activeTodo$ = this.selectActive();
     this.activeTodoId$ = this.selectActiveId();
+
+    this.error$ = this.selectError();
 
     this.todos$ = this.selectAll();
   }
