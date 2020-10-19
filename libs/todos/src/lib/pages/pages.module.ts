@@ -7,15 +7,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // PAGES
 import { HomeComponent } from './home/home.component';
+import { PokemonComponent } from './pokemon/pokemon.component';
 
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, PokemonComponent],
   imports: [
     CommonModule,
     ComponentsModule,
     PagesRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
   ]
 })
 export class PagesModule { }

@@ -1,0 +1,11 @@
+<button (click)="getPokemon()">Show me the best pokemon</button>
+
+<button (click)="getPokemons()">Show me the best generation</button>
+
+<button (click)="cleanStore()">Clean store</button>
+
+{{isLoading$ | async}}
+
+<div *ngFor="let pokemon of (pokemons$ | async)">
+  {{ pokemon.name }}
+</div>
