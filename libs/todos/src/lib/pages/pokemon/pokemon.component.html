@@ -1,11 +1,33 @@
-<button (click)="getPokemon()">Show me the best pokemon</button>
-
-<button (click)="getPokemons()">Show me the best generation</button>
-
 <button (click)="cleanStore()">Clean store</button>
 
-{{isLoading$ | async}}
+{{ isLoading$ | async }}
 
-<div *ngFor="let pokemon of (pokemons$ | async)">
-  {{ pokemon.name }}
+<div style="display: flex; justify-content: space-between;">
+  <div #listGet>
+    <div *ngFor="let item of pokemonList$ | async">
+      <span (click)="getPokemon(item.name)">{{ item.name }}</span>
+    </div>
+  </div>
+
+  <div #listDetails>
+    <div *ngFor="let pokemon of pokemons$ | async">
+      <span (click)="setActivePokemon(pokemon.name)">{{ pokemon.name }}</span>
+    </div>
+  </div>
 </div>
+
+<div
+  style="
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 100px;
+    height: 100vh;
+    background-color: blue;
+  "
+  *ngIf="(activePokemon$ | async) as activePokemons"
+>
+  <img *ngFor="let pokemon of activePokemons" [src]="pokemon.sprites.front_default">
+</div>
+
+<button (click)="getPokemons()">Carregar mais +</button>

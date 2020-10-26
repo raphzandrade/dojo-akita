@@ -4,10 +4,18 @@ import { Injectable } from '@angular/core';
 
 // rxjs
 import { Subject } from 'rxjs';
-import { finalize, map, pluck, takeUntil } from 'rxjs/operators';
+import {
+  finalize,
+  map,
+  pluck,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 
 // interfaces
-import { Pokemon } from './pokemon.model';
+import { Pokemon, PokemonItem } from './pokemon.model';
+import { PokemonQuery } from './pokemon.query';
 
 // store
 import { PokemonStore, PokemonState } from './pokemon.store';
@@ -18,30 +26,38 @@ export class PokemonService {
 
   private unsubscribe$: Subject<void>;
 
-  constructor(protected store: PokemonStore, private http: HttpClient) {
+  constructor(
+    protected store: PokemonStore,
+    protected query: PokemonQuery,
+    private http: HttpClient
+  ) {
     this.unsubscribe$ = new Subject();
   }
 
-  getPokemons(limit: number): void {
-    const url = this.apiUrl + `pokemon?limit=${limit}`;
-
+  getPokemons(): void {
     this.startRequest();
 
-    // this.http
-    //   .get(url)
-    //   .pipe(
-    //     pluck('results'),
-    //     map((pokemon: PokemonItem) => ({
-    //       ...pokemon,
-    //       id: pokemon.name,
-    //     })),
-    //     takeUntil(this.unsubscribe$),
-    //     finalize(() => this.closeRequest)
-    //   )
-    //   .subscribe((results: PokemonItem[]) => {
-    //     console.log(results);
-    //     this.store.set(results);
-    //   });
+    this.query.getParameters$
+      .pipe(
+        take(1),
+        switchMap((parameters) => {
+          const url =
+            this.apiUrl +
+            `pokemon?limit=${parameters.limit}&offset=${parameters.offset}`;
+
+          return this.http.get(url);
+        }),
+        pluck('results'),
+        takeUntil(this.unsubscribe$),
+        finalize(() => this.closeRequest())
+      )
+      .subscribe((results: PokemonItem[]) => {
+        this.store.update((state) => ({
+          ...state,
+          offset: state.offset + state.limit,
+          pokemonList: [...state.pokemonList, ...results],
+        }));
+      });
   }
 
   getPokemon(name: string) {
@@ -51,11 +67,15 @@ export class PokemonService {
       .get(url)
       .pipe(
         takeUntil(this.unsubscribe$),
-        finalize(() => this.closeRequest)
+        finalize(() => this.closeRequest())
       )
       .subscribe((response: Pokemon) => {
         this.store.add(response);
       });
+  }
+
+  setActivePokemon(name: string) {
+    this.store.addActive(name);
   }
 
   cleanStore(): void {

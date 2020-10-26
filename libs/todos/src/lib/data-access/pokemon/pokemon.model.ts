@@ -329,3 +329,8 @@ export interface Pokemon {
   types: Type[];
   weight: number;
 }
+
+export interface PokemonItem {
+  name: string;
+  url: string;
+}
